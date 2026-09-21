@@ -1,2 +1,3 @@
-# symbaroum-cs
-Symbaroum's Character Sheet
+# Symbaroum's Character Sheet
+
+https://ncsf01.github.io/symbaroum-cs/
