@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Symbaroum's Online Character Sheet</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Cinzel+Decorative:wght@700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link
+    href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css"
+    rel="stylesheet"
+  >
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+  <!--
+    ===================
+    CONTAINER PRINCIPAL
+    ===================
+  -->
+  <div class="container-fluid sheet-wrap">
+
+    <header class="sheet-header">
+      <div class="text-center mb-4">
+        <h1 class="sheet-title">Symbaroum</h1>
+        <p class="subtitle">Character Sheet</p>
+      </div>
+
+      <div class="row g-3 justify-content-center">
+        <div class="col-6 col-md-3">
+          <label class="field-label" for="charName">Name</label>
+          <input type="text" id="charName" class="field-input title-input" placeholder="Unspoken name...">
+        </div>
+        <div class="col-6 col-md-3">
+          <label class="field-label" for="charRace">Race</label>
+          <input type="text" id="charRace" class="field-input" placeholder="Human, Changeling, Ogre, Goblin...">
+        </div>
+        <div class="col-6 col-md-3">
+          <label class="field-label" for="charOccupation">Occupation</label>
+          <input type="text" id="charOccupation" class="field-input" placeholder="Treasure-Hunter...">
+        </div>
+      </div>
+      <div class="row g-3 mt-2 justify-content-center xp-row">
+        <div class="col-4 col-md-2">
+          <label class="field-label" for="charXpTotal">Total XP</label>
+          <input type="number" id="charXpTotal" class="field-input text-center" value="0">
+        </div>
+        <div class="col-4 col-md-2">
+          <label class="field-label" for="charXpSpent">XP Spent</label>
+          <input type="number" id="charXpSpent" class="field-input text-center" value="0">
+        </div>
+        <div class="col-4 col-md-2">
+          <label class="field-label" for="charXpAvailable">Available</label>
+          <input type="number" id="charXpAvailable" class="field-input text-center" value="0" readonly>
+        </div>
+      </div>
+
+    </header>
+
+    <!--
+      ================================
+      LINHA PRINCIPAL COM DUAS COLUNAS
+      ================================
+        <div class="row">
+          <div class="col-...">coluna 1</div>
+          <div class="col-...">coluna 2</div>
+        </div>
+    -->
+    <div class="row g-4 main-grid">
+
+      <!-- COLUNA ESQUERDA: Atributes + Combat + Corruption -->
+      <div class="col-12 col-md-5">
+        <section class="panel" id="panelAttributes">
+          <h2 class="panel-title">Attributes</h2>
+          <p class="attr-hint">
+            Typical distribution: 5 · 7 · 9 · 10 · 10 · 11 · 13 · 15 <br>
+            (only one Attribute may be 15, none below 5)
+          </p>
+
+          <div class="attr-grid">
+            <div class="attr-box">
+              <label class="field-label" for="attrAcc">Accurate (ACC)</label>
+              <input type="number" id="attrAcc" class="attr-input" data-attr="acc" value="10">
+            </div>
+            <div class="attr-box">
+              <label class="field-label" for="attrCun">Cunning (CUN)</label>
+              <input type="number" id="attrCun" class="attr-input" data-attr="cun" value="10">
+            </div>
+            <div class="attr-box">
+              <label class="field-label" for="attrDis">Discreet (DIS)</label>
+              <input type="number" id="attrDis" class="attr-input" data-attr="dis" value="10">
+            </div>
+            <div class="attr-box">
+              <label class="field-label" for="attrPer">Persuasive (PER)</label>
+              <input type="number" id="attrPer" class="attr-input" data-attr="per" value="10">
+            </div>
+            <div class="attr-box">
+              <label class="field-label" for="attrQui">Quick (QUI)</label>
+              <input type="number" id="attrQui" class="attr-input" data-attr="qui" value="10">
+            </div>
+            <div class="attr-box">
+              <label class="field-label" for="attrRes">Resolute (RES)</label>
+              <input type="number" id="attrRes" class="attr-input" data-attr="res" value="10">
+            </div>
+            <div class="attr-box">
+              <label class="field-label" for="attrStr">Strong (STR)</label>
+              <input type="number" id="attrStr" class="attr-input" data-attr="str" value="10">
+            </div>
+            <div class="attr-box">
+              <label class="field-label" for="attrVig">Vigilant (VIG)</label>
+              <input type="number" id="attrVig" class="attr-input" data-attr="vig" value="10">
+            </div>
+          </div>
+        </section>
+
+        <section class="panel mt-4" id="panelCombat">
+          <h2 class="panel-title">Combat Statistics</h2>
+
+          <!--
+              Toughness = Strong (nunca menos que 10)
+              Pain Threshold = Strong ÷ 2 (arredondado pra cima)
+              Defense = Quick − Impeding da armadura
+              Corruption Threshold = Resolute ÷ 2 (arredondado pra cima)
+              Initiative = igual ao valor de Quick
+          -->
+          <div class="combat-grid">
+            <div class="combat-box">
+              <span id="statToughness" class="combat-value">10</span>
+              <span class="field-label">Toughness</span>
+            </div>
+            <div class="combat-box">
+              <span id="statPainThreshold" class="combat-value">5</span>
+              <span class="field-label">Pain Threshold</span>
+            </div>
+            <div class="combat-box">
+              <span id="statDefense" class="combat-value">10</span>
+              <span class="field-label">Defense</span>
+            </div>
+            <div class="combat-box">
+              <span id="statCorruptionThreshold" class="combat-value">5</span>
+              <span class="field-label">Corr. Threshold</span>
+            </div>
+            <div class="combat-box">
+              <span id="statInitiative" class="combat-value">10</span>
+              <span class="field-label">Initiative</span>
+            </div>
+          </div>
+          <div class="tracker-block mt-4">
+            <p class="field-label mb-2">Current Toughness</p>
+            <div class="tracker-row">
+              <button type="button" class="btn-rune" id="toughnessMinus" aria-label="Decrease current Toughness">−</button>
+              <span id="toughnessCurrent" class="tracker-value">10</span>
+              <span class="tracker-sep">/</span>
+              <span id="toughnessMaxEcho" class="tracker-value tracker-value-dim">10</span>
+              <button type="button" class="btn-rune" id="toughnessPlus" aria-label="Increase current Toughness">+</button>
+            </div>
+            <div class="progress-track">
+              <div id="toughnessBar" class="progress-fill"></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel mt-4" id="panelCorruption">
+          <!-- Corruption -->
+        </section>
+      </div>
+
+      <!-- COLUNA DIREITA: Abilities, Weapons, Armor, etc -->
+      <div class="col-12 col-md-7">
+        <section class="panel" id="panelAbilities">
+          <!-- Abilities & Powers -->
+        </section>
+
+        <section class="panel mt-4" id="panelWeapons">
+          <!-- Weapons -->
+        </section>
+
+        <section class="panel mt-4" id="panelArmor">
+          <!-- Armor -->
+        </section>
+
+        <section class="panel mt-4" id="panelExtras">
+          <!-- traits, equipment, boons, burdens, notes -->
+        </section>
+      </div>
+
+    </div> <!-- fim da .row -->
+
+  </div> <!-- fim do .container-fluid -->
+
+  <!--
+    ======================================================
+    PAINÉIS DESLIZANTES (esquerda = personagens, direita =
+    compêndio de habilidades). 
+    ======================================================
+  -->
+  <aside id="panelCharacters"><!-- Character Manager --></aside>
+  <aside id="panelCompendium"><!-- Compendium --></aside>
+
+  <!--
+    Dice Roller
+  -->
+  <div id="diceRoller"></div>
+
+  <!--
+    =======
+    SCRIPTS
+    =======
+  -->
+  <script src="js/script.js"></script>
+
+</body>
+</html>

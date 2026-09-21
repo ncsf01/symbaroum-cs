@@ -1,0 +1,273 @@
+:root {
+  --bg-black:     #0d100b;   /* fundo mais escuro da página */
+  --bg-forest:    #16201a;   /* verde-floresta escuro (painéis) */
+  --border-dim:   #2a352a;   /* linhas/bordas discretas */
+  --gold:         #a9853f;   /* dourado — títulos e destaques */
+  --parchment:    #d8d0b8;   /* cor do "papel envelhecido" (texto) */
+  --parchment-dim:#b2ae9d;   /* texto secundário, mais apagado */
+  --crimson:      #7a2b28;   /* vermelho escuro — corrupção/perigo */
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background-color: var(--bg-black);
+  color: var(--parchment);
+  font-family: "Crimson Text", serif;
+  font-size: 1.05rem;
+}
+
+.sheet-wrap {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem 4rem;
+}
+
+/* -----------------------------------------------
+   CABEÇALHO
+----------------------------------------------- */
+.sheet-title {
+  font-family: "Cinzel Decorative", serif;
+  font-size: 2.6rem;
+  color: var(--gold);
+  margin: 0.25rem 0 -.5rem;
+  letter-spacing: 0.05em;
+}
+
+.subtitle {
+  font-family: "Cinzel", serif;
+  font-size: .8rem;
+  letter-spacing: 0.15em;
+  color: var(--parchment-dim);
+  margin: 0;
+}
+
+.sheet-header {
+  border-bottom: 1px solid var(--border-dim);
+  padding-bottom: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.field-label {
+  display: block;
+  font-family: "Cinzel", serif;
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+  color: var(--parchment-dim);
+  margin-bottom: 0.3rem;
+}
+
+.field-input {
+  width: 100%;
+  background: rgba(216, 208, 184, 0.05);
+  border: none;
+  border-bottom: 1px solid var(--border-dim);
+  color: var(--parchment);
+  font-family: "Crimson Text", serif;
+  font-size: 1.05rem;
+  padding: 0.35rem 0.1rem;
+}
+
+.field-input[readonly] {
+  color: var(--parchment-dim);
+  border-bottom-style: dashed;
+}
+
+.field-input:focus {
+  outline: none;
+  border-bottom-color: var(--gold);
+  background: rgba(216, 208, 184, 0.08);
+}
+
+.title-input {
+  font-family: "Cinzel", serif;
+  font-size: 1rem;
+}
+
+/* -----------------------------------------------
+   PAINÉIS
+------------------------------------------------ */
+.panel {
+  background: var(--bg-forest);
+  border: 1px solid var(--border-dim);
+  border-radius: 2px;
+  padding: 1.5rem;
+}
+
+.panel-title {
+  font-family: "Cinzel", serif;
+  font-size: 0.95rem;
+  letter-spacing: 0.08em;
+  color: var(--gold);
+  margin: 0 0 1rem;
+  text-transform: uppercase;
+}
+
+.attr-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.75rem;
+}
+
+.attr-box {
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid var(--border-dim);
+  border-radius: 2px;
+  padding: 0.6rem 0.7rem;
+  text-align: center;
+}
+
+.attr-input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  color: var(--parchment);
+  font-family: "JetBrains Mono", monospace;
+  font-size: 1.4rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.attr-input:focus {
+  outline: none;
+  color: var(--gold);
+}
+
+/* Esconder setinhas */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+/* Textinho pequeno de referência acima do grid de atributos
+   (a distribuição típica de pontos). */
+.attr-hint {
+  font-size: 0.75rem;
+  font-style: italic;
+  color: var(--parchment-dim);
+  margin: -1rem 0 1rem;
+}
+
+/* -----------------------------------------------
+   GRID DE ATRIBUTOS
+   --------------------------------------------- */
+.attr-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  gap: 0.75rem;
+}
+
+.attr-box {
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid var(--border-dim);
+  border-radius: 2px;
+  padding: 0.6rem 0.7rem;
+  text-align: center;
+  min-width: 0;
+}
+
+.attr-input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  color: var(--parchment);
+  font-family: "JetBrains Mono", monospace;
+  font-size: 1.4rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.attr-input:focus {
+  outline: none;
+  color: var(--gold);
+}
+
+/* -----------------------------------------------
+   GRID DE ESTATÍSTICAS DE COMBATE
+   -------------------------------------------- */
+.combat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+  gap: 0.75rem;
+}
+
+.combat-box {
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid var(--border-dim);
+  border-radius: 2px;
+  padding: 0.6rem 0.4rem;
+  text-align: center;
+  min-width: 0;
+}
+
+.combat-value {
+  display: block;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--gold);
+}
+
+/* -------------------------------------
+   RASTREADOR
+-------------------------------------- */
+.tracker-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  margin-bottom: 0.5rem;
+}
+
+.btn-rune {
+  width: 2.1rem;
+  height: 2.1rem;
+  border-radius: 50%;
+  border: 1px solid var(--gold);
+  background: rgba(169, 133, 63, 0.08);
+  color: var(--gold);
+  font-size: 1.2rem;
+  line-height: 1;
+  cursor: pointer;
+}
+.btn-rune:hover {
+  background: rgba(169, 133, 63, 0.25);
+}
+
+.tracker-value {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 1.5rem;
+  font-weight: 700;
+  min-width: 2rem;
+  text-align: center;
+}
+
+.tracker-value-dim {
+  color: var(--parchment-dim);
+}
+
+.tracker-sep {
+  color: var(--parchment-dim);
+}
+
+
+.progress-track {
+  height: 0.5rem;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  width: 100%; /* o JavaScript vai mudar esse valor dinamicamente */
+  background: linear-gradient(90deg, rgb(0, 58, 0), rgb(0, 82, 0));
+  transition: width 0.2s ease;
+}
