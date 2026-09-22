@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<!-- Informa ao navegador que este documento usa o padrao HTML5. -->
+<html lang="en-US">
+<head>
+  <!-- Codificacao que permite acentos e outros caracteres especiais. -->
+  <meta charset="UTF-8">
+  <!-- Faz a largura da pagina acompanhar a largura do dispositivo. -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Texto exibido na aba do navegador. -->
+  <title>Symbaroum's Online Character Sheet</title>
+
+  <!-- Melhora o carregamento das fontes hospedadas pelo Google Fonts. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Cinzel+Decorative:wght@700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <!-- Bootstrap fornece o grid responsivo e utilitarios como d-flex e mt-4. -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+  <!-- CSS proprio: cores, tipografia e componentes especificos da ficha. -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+  <!-- container-fluid ocupa a largura disponivel; sheet-wrap limita e centraliza o conteudo. -->
+  <!-- container-fluid = ocupa a largura toda; sheet-wrap (nosso) limita o max-width e centraliza -->
+  <div class="container-fluid sheet-wrap">
+
+    <!-- Cabecalho: titulo, identificacao do personagem e experiencia. -->
+    <header class="sheet-header">
+      <!-- text-center centraliza; mb-4 adiciona margem inferior do Bootstrap. -->
+      <div class="text-center mb-4">
+        <h1 class="sheet-title">Symbaroum</h1>
+        <p class="subtitle">Character Sheet</p>
+      </div>
+
+      <!-- row cria uma linha; g-3 define o espaco; justify-content-center centraliza colunas. -->
+      <div class="row g-3 justify-content-center">
+        <!-- col-6 ocupa metade no celular; col-md-3 ocupa 3/12 a partir de telas medias. -->
+        <div class="col-6 col-md-3">
+          <!-- for conecta o label ao input pelo id, melhorando acessibilidade. -->
+          <label class="field-label" for="charName">Name</label>
+          <input type="text" id="charName" class="field-input title-input" placeholder="Unspoken name...">
+        </div>
+        <div class="col-6 col-md-3">
+          <label class="field-label" for="charRace">Race</label>
+          <input type="text" id="charRace" class="field-input" placeholder="Human, Changeling, Ogre, Goblin...">
+        </div>
+        <div class="col-6 col-md-3">
+          <label class="field-label" for="charOccupation">Occupation</label>
+          <input type="text" id="charOccupation" class="field-input" placeholder="Treasure-Hunter...">
+        </div>
+      </div>
+
+      <!-- Experiencia: Available e readonly porque e calculada no script.js (total - spent). -->
+      <div class="row g-3 mt-2 justify-content-center xp-row">
+        <!-- Cada campo ocupa 1/3 no celular e 2/12 em telas medias. -->
+        <div class="col-4 col-md-2">
+          <label class="field-label" for="charXpTotal">Total XP</label>
+          <input type="number" id="charXpTotal" class="field-input text-center" value="0">
+        </div>
+        <div class="col-4 col-md-2">
+          <label class="field-label" for="charXpSpent">XP Spent</label>
+          <input type="number" id="charXpSpent" class="field-input text-center" value="0">
+        </div>
+        <div class="col-4 col-md-2">
+          <label class="field-label" for="charXpAvailable">Available</label>
+          <input type="number" id="charXpAvailable" class="field-input text-center" value="0" readonly>
+        </div>
+      </div>
+    </header>
+
+    <!-- Grid principal: esquerda para atributos/combate e direita para habilidades/equipamento. -->
+    <div class="row g-4 main-grid">
+
+      <!-- col-12 empilha no celular; col-md-5 usa 5/12 da largura em telas medias. -->
+      <div class="col-12 col-md-5">
+
+        <!-- Painel dos oito atributos basicos do personagem. -->
+        <section class="panel" id="panelAttributes">
+          <!-- d-flex justify-content-between = título de um lado, botão do outro -->
+          <div class="d-flex justify-content-between align-items-start">
+            <h2 class="panel-title mb-0">Attributes</h2>
+            <button type="button" id="randomizeAttrs" class="btn-mini" title="Distribute typical values randomly">🎲 Random</button>
+          </div>
+          <!-- Texto de referencia; br forca uma nova linha. -->
+          <p class="attr-hint">
+            Typical distribution: 5 · 7 · 9 · 10 · 10 · 11 · 13 · 15 <br>
+            (only one Attribute may be 15, none below 5)
+          </p>
+
+          <!-- data-attr e a chave lida pelo JS atraves de input.dataset.attr. -->
+          <div class="attr-grid">
+            <!-- Cada attr-box agrupa o nome e o valor editavel de um atributo. -->
+            <div class="attr-box">
+              <label class="field-label" for="attrAcc">Accurate (ACC)</label>
+              <!-- type=number restringe a entrada a valores numericos; value e o valor inicial. -->
+              <input type="number" id="attrAcc" class="attr-input" data-attr="acc" value="10">
+            </div>
+            <div class="attr-box">
+              <label class="field-label" for="attrCun">Cunning (CUN)</label>
+              <input type="number" id="attrCun" class="attr-input" data-attr="cun" value="10">
+            </div>
+            <div class="attr-box">
+              <label class="field-label" for="attrDis">Discreet (DIS)</label>
+              <input type="number" id="attrDis" class="attr-input" data-attr="dis" value="10">
+            </div>
+            <div class="attr-box">
+              <label class="field-label" for="attrPer">Persuasive (PER)</label>
+              <input type="number" id="attrPer" class="attr-input" data-attr="per" value="10">
+            </div>
+            <div class="attr-box">
+              <label class="field-label" for="attrQui">Quick (QUI)</label>
+              <input type="number" id="attrQui" class="attr-input" data-attr="qui" value="10">
+            </div>
+            <div class="attr-box">
+              <label class="field-label" for="attrRes">Resolute (RES)</label>
+              <input type="number" id="attrRes" class="attr-input" data-attr="res" value="10">
+            </div>
+            <div class="attr-box">
+              <label class="field-label" for="attrStr">Strong (STR)</label>
+              <input type="number" id="attrStr" class="attr-input" data-attr="str" value="10">
+            </div>
+            <div class="attr-box">
+              <label class="field-label" for="attrVig">Vigilant (VIG)</label>
+              <input type="number" id="attrVig" class="attr-input" data-attr="vig" value="10">
+            </div>
+          </div>
+        </section>
+
+        <!-- Painel com estatisticas calculadas a partir dos atributos. -->
+        <section class="panel mt-4" id="panelCombat">
+          <h2 class="panel-title">Combat Statistics</h2>
+
+          <!-- fórmulas (livro, Secondary Attributes):
+               Toughness = Strong (mín. 10) | Pain Threshold = Strong/2 (cima)
+               Defense = Quick - Impeding armadura | Corr. Threshold = Resolute/2 (cima)
+               Initiative = Quick -->
+          <!-- Cada combat-box mostra um resultado calculado pelo JavaScript. -->
+          <div class="combat-grid">
+            <div class="combat-box">
+              <!-- span e usado porque o JS atualiza apenas o texto do valor. -->
+              <span id="statToughness" class="combat-value">10</span>
+              <span class="field-label">Max Toughness</span>
+            </div>
+            <div class="combat-box">
+              <span id="statPainThreshold" class="combat-value">5</span>
+              <span class="field-label">Pain Threshold</span>
+            </div>
+            <div class="combat-box">
+              <span id="statDefense" class="combat-value">10</span>
+              <span class="field-label">Defense</span>
+            </div>
+            <div class="combat-box">
+              <span id="statCorruptionThreshold" class="combat-value">5</span>
+              <span class="field-label">Corr. Threshold</span>
+            </div>
+            <div class="combat-box">
+              <span id="statInitiative" class="combat-value">10</span>
+              <span class="field-label">Initiative</span>
+            </div>
+          </div>
+
+          <!-- Toughness atual: o jogador controla com os botoes -/+ durante a partida. -->
+          <div class="tracker-block mt-4">
+            <p class="field-label mb-2">Current Toughness</p>
+            <!-- A linha apresenta diminuir, atual, maximo e aumentar. -->
+            <div class="tracker-row">
+              <button type="button" class="btn-rune" id="toughnessMinus" aria-label="Decrease current Toughness">−</button>
+              <span id="toughnessCurrent" class="tracker-value">10</span>
+              <span class="tracker-sep">/</span>
+              <span id="toughnessMaxEcho" class="tracker-value tracker-value-dim">10</span>
+              <button type="button" class="btn-rune" id="toughnessPlus" aria-label="Increase current Toughness">+</button>
+            </div>
+            <!-- O JS troca a classe tough-* conforme a porcentagem restante. -->
+            <div class="progress-track">
+              <div id="toughnessBar" class="progress-fill tough-healthy"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Painel com corrupcao temporaria, permanente e seu limite. -->
+        <section class="panel mt-4" id="panelCorruption">
+          <h2 class="panel-title">Corruption</h2>
+
+          <!-- Dois contadores independentes, cada um com seus botoes -/+. -->
+          <div class="corr-trackers">
+            <div class="tracker-block">
+              <p class="field-label mb-2">Temporary</p>
+              <div class="tracker-row">
+                <button type="button" class="btn-rune" id="tempCorrMinus" aria-label="Decrease temporary Corruption">−</button>
+                <span id="tempCorrValue" class="tracker-value">0</span>
+                <button type="button" class="btn-rune" id="tempCorrPlus" aria-label="Increase temporary Corruption">+</button>
+              </div>
+            </div>
+            <div class="tracker-block">
+              <p class="field-label mb-2">Permanent</p>
+              <div class="tracker-row">
+                <button type="button" class="btn-rune" id="permCorrMinus" aria-label="Decrease permanent Corruption">−</button>
+                <span id="permCorrValue" class="tracker-value">0</span>
+                <button type="button" class="btn-rune" id="permCorrPlus" aria-label="Increase permanent Corruption">+</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Barra em camadas: permanente, total temporario e marcador do threshold. -->
+          <div class="progress-track corr-track mt-3">
+            <div id="permCorrBar" class="progress-fill corr-fill-perm"></div>
+            <div id="tempCorrBar" class="progress-fill corr-fill-temp"></div>
+            <div id="corrThresholdMarker" class="corr-threshold-marker"></div>
+          </div>
+          <div class="tracker-row mt-2">
+            <span class="field-label mb-0">Total</span>
+            <span id="corrTotalValue" class="tracker-value">0</span>
+            <span class="tracker-sep">/</span>
+            <span id="corrMaxValue" class="tracker-value tracker-value-dim">10</span>
+          </div>
+          <p id="corrStatus" class="corr-status mt-2">Untainted</p>
+        </section>
+      </div>
+
+      <!-- Coluna direita: habilidades, armas, armadura e informacoes extras. -->
+      <div class="col-12 col-md-7">
+
+        <!-- Painel de habilidades: suas linhas sao criadas dinamicamente pelo JS. -->
+        <section class="panel" id="panelAbilities">
+            <h2 class="panel-title mb-0">Abilities &amp; Powers</h2>
+            <!-- A adicao de novas habilidades acontece na aba lateral (ver #panelCompendium),
+               longe do botao de remover de cada linha, pra evitar clique acidental. -->
+          <p class="attr-hint mb-0">Use the "+ Ability/Power" on the right tab to add your own.</p>
+          <!-- O JS insere aqui cada .ability-row criada por addAbilityRow(). -->
+          <div id="abilitiesList" class="dyn-list mt-3"></div>
+        </section>
+
+        <!-- Reservado para a lista de armas. -->
+        <section class="panel mt-4" id="panelWeapons">
+          <!-- Conteudo sera implementado em uma etapa futura. -->
+        </section>
+
+        <!-- Reservado para armaduras e seus modificadores. -->
+        <section class="panel mt-4" id="panelArmor">
+          <!-- Conteudo sera implementado em uma etapa futura. -->
+        </section>
+
+        <!-- Reservado para traits, equipamento, boons, burdens e notas. -->
+        <section class="panel mt-4" id="panelExtras">
+          <!-- Conteudo sera implementado em uma etapa futura. -->
+        </section>
+      </div>
+
+    </div> <!-- /.row.main-grid -->
+
+  </div> <!-- /.sheet-wrap -->
+
+<!-- Aba fixa na borda direita da tela; abre o painel de adicao de habilidades. -->
+  <button type="button" id="openCompendiumTab" class="side-tab">+ Ability</button>
+
+  <!-- Fundo escurecido atras do painel lateral; clicar nele tambem fecha o painel. -->
+  <div id="compendiumBackdrop" class="side-backdrop d-none"></div>
+
+  <!-- Paineis deslizantes: panelCharacters (Passo 8) ainda vazio; panelCompendium ja
+       funciona como formulario de nova habilidade, e ganha busca/drag-and-drop no Passo 9. -->
+  <aside id="panelCharacters"><!-- Passo 8 --></aside>
+
+  <aside id="panelCompendium">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h2 class="panel-title mb-0">Add Ability</h2>
+      <button type="button" id="closeCompendiumBtn" class="btn-mini">Close</button>
+    </div>
+    <p class="attr-hint">
+      Custom entry for now — a searchable list of the book's abilities
+      (with drag-and-drop) arrives in a later step.
+    </p>
+
+    <label class="field-label" for="newAbilityLevel">Level</label>
+    <select id="newAbilityLevel" class="ability-level-select mb-3" style="width:100%;">
+      <option value="novice">Novice</option>
+      <option value="adept">Adept</option>
+      <option value="master">Master</option>
+    </select>
+
+    <label class="field-label" for="newAbilityName">Name</label>
+    <input type="text" id="newAbilityName" class="field-input mb-3" placeholder="Ability name...">
+
+    <label class="field-label" for="newAbilityDesc">Effect</label>
+    <textarea id="newAbilityDesc" class="field-input mb-3" rows="3" placeholder="Short effect description..."></textarea>
+
+    <button type="button" id="submitNewAbility" class="btn-mini">Add to Sheet</button>
+  </aside>
+  <!-- Area reservada para o rolador de dados. -->
+  <div id="diceRoller"><!-- Conteudo sera implementado em uma etapa futura. --></div>
+
+  <!-- Pop-up de regras: aparece quando Toughness chega a 0 ou a Corrupcao chega ao maximo. -->
+  <div id="ruleModalBackdrop" class="rule-modal-backdrop d-none">
+    <div class="rule-modal">
+      <h3 id="ruleModalTitle" class="rule-modal-title"></h3>
+      <p id="ruleModalText" class="rule-modal-text"></p>
+      <button type="button" id="ruleModalClose" class="btn-mini">Close</button>
+    </div>
+  </div>
+  <!-- Carrega o JavaScript no fim do body, depois que os elementos HTML ja existem. -->
+  <script src="js/script.js"></script>
+
+</body>
+</html>

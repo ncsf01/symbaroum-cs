@@ -1,0 +1,405 @@
+:root {
+  --bg-black:      #0d100b;   /* fundo mais escuro da página */
+  --bg-forest:     #16201a;   /* verde-floresta escuro (painéis) */
+  --border-dim:    #2a352a;   /* linhas/bordas discretas */
+  --gold:          #a9853f;   /* dourado — títulos e destaques */
+  --parchment:     #d8d0b8;   /* "papel envelhecido" (texto) */
+  --parchment-dim: #b2ae9d;   /* texto secundário, mais apagado */
+
+  /* paleta "sangrenta" — usada no HP crítico e na corrupção (ambos vermelhos, não laranja) */
+  --blood-dark:    #4a1210;   /* vermelho escuro/seco — dano leve, corrupção permanente */
+  --blood-bright:  #c1272d;   /* vermelho vivo/arterial — dano crítico, corrupção temporária */
+
+  --crimson:       #7a2b28;
+}
+
+* {
+  box-sizing: border-box; /* borda conta dentro do width, evita elemento "vazar" do layout */
+}
+
+body {
+  margin: 0;
+  background-color: var(--bg-black);
+  color: var(--parchment);
+  font-family: "Crimson Text", serif;
+  font-size: 1.05rem;
+}
+
+.sheet-wrap {
+  max-width: 1280px;
+  margin: 0 auto; /* centraliza horizontalmente */
+  padding: 2.5rem 1.5rem 4rem;
+}
+
+/* ==================
+   CABEÇALHO
+================== */
+.sheet-title {
+  font-family: "Cinzel Decorative", serif;
+  font-size: 2.6rem;
+  color: var(--gold);
+  margin: 0.25rem 0 -.5rem;
+  letter-spacing: 0.05em;
+}
+
+.subtitle {
+  font-family: "Cinzel", serif;
+  font-size: .8rem;
+  letter-spacing: 0.15em;
+  color: var(--parchment-dim);
+  margin: 0;
+}
+
+.sheet-header {
+  border-bottom: 1px solid var(--border-dim);
+  padding-bottom: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.field-label {
+  display: block;
+  font-family: "Cinzel", serif;
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+  color: var(--parchment-dim);
+  margin-bottom: 0.3rem;
+}
+
+/* usada em <input> e <textarea> igual — mesma aparência pros dois */
+.field-input {
+  width: 100%;
+  background: rgba(216, 208, 184, 0.05);
+  border: none;
+  border-bottom: 1px solid var(--border-dim);
+  color: var(--parchment);
+  font-family: "Crimson Text", serif;
+  font-size: 1.05rem;
+  padding: 0.35rem 0.1rem;
+}
+
+.field-input[readonly] {
+  color: var(--parchment-dim);
+  border-bottom-style: dashed; /* sinal visual de "isso é calculado, não digite" */
+}
+
+.field-input:focus {
+  outline: none;
+  border-bottom-color: var(--gold);
+  background: rgba(216, 208, 184, 0.08);
+}
+
+.title-input {
+  font-family: "Cinzel", serif;
+  font-size: 1rem;
+}
+
+/* esconde as setinhas nativas de qualquer <input type="number"> da página */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+
+/* ==================
+   PAINÉIS
+================== */
+.panel {
+  background: var(--bg-forest);
+  border: 1px solid var(--border-dim);
+  border-radius: 2px;
+  padding: 1.5rem;
+}
+
+.panel-title {
+  font-family: "Cinzel", serif;
+  font-size: 0.95rem;
+  letter-spacing: 0.08em;
+  color: var(--gold);
+  margin: 0 0 1rem;
+  text-transform: uppercase;
+}
+
+/* botão pequeno de canto (Random, +Add...) — discreto, sem competir com o resto */
+.btn-mini {
+  background: transparent;
+  border: 1px solid var(--border-dim);
+  color: var(--parchment-dim);
+  font-size: 0.75rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 3px;
+  cursor: pointer;
+}
+.btn-mini:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+/* aviso pequeno acima do grid de atributos (distribuição típica) */
+.attr-hint {
+  font-size: 0.75rem;
+  font-style: italic;
+  color: var(--parchment-dim);
+  margin: 0 0 1rem;
+}
+
+/* ==================
+   GRID DE ATRIBUTOS
+   auto-fit + minmax = colunas flexíveis, sem overflow em painel estreito
+================== */
+.attr-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  gap: 0.75rem;
+}
+
+.attr-box {
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid var(--border-dim);
+  border-radius: 2px;
+  padding: 0.6rem 0.7rem;
+  text-align: center;
+  min-width: 0; /* sem isso, grid item nunca fica menor que o conteúdo (estoura a coluna) */
+}
+
+.attr-input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  color: var(--parchment);
+  font-family: "JetBrains Mono", monospace;
+  font-size: 1.4rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.attr-input:focus {
+  outline: none;
+  color: var(--gold);
+}
+
+/* ==================
+   GRID DE COMBAT STATISTICS
+================== */
+.combat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+  gap: 0.75rem;
+}
+
+.combat-box {
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid var(--border-dim);
+  border-radius: 2px;
+  padding: 0.6rem 0.4rem;
+  text-align: center;
+  min-width: 0;
+}
+
+.combat-value {
+  display: block;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--gold);
+}
+
+/* ==================
+   RASTREADOR (base pra Toughness e Corruption)
+================== */
+.tracker-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  margin-bottom: 0.5rem;
+}
+
+.btn-rune {
+  width: 2.1rem;
+  height: 2.1rem;
+  border-radius: 50%; /* círculo perfeito (width = height) */
+  border: 1px solid var(--gold);
+  background: rgba(169, 133, 63, 0.08);
+  color: var(--gold);
+  font-size: 1.2rem;
+  line-height: 1;
+  cursor: pointer;
+}
+.btn-rune:hover {
+  background: rgba(169, 133, 63, 0.25);
+}
+
+.tracker-value {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 1.5rem;
+  font-weight: 700;
+  min-width: 2rem;
+  text-align: center;
+}
+
+.tracker-value-dim {
+  color: var(--parchment-dim);
+}
+
+.tracker-sep {
+  color: var(--parchment-dim);
+}
+
+/* Trilho de fundo da barra; position:relative ancora as camadas absolutas
+  da barra de corrupcao e o marcador de threshold. */
+.progress-track {
+  position: relative;
+  height: 0.5rem;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 4px;
+  overflow: visible; /* permite que o marcador ultrapasse levemente o trilho */
+}
+
+.progress-fill {
+  height: 100%;
+  width: 100%; /* JS muda esse valor a cada tick */
+  border-radius: 4px;
+  transition: width 0.2s ease;
+}
+
+/* --------------------------------------------------
+   ESTADOS DE VIDA (Current Toughness) — cor reage ao % restante
+   JS troca a classe (tough-healthy/wounded/critical) em updateToughnessTracker()
+-------------------------------------------------- */
+.tough-healthy {
+  background: linear-gradient(90deg, rgb(0, 58, 0), rgb(0, 82, 0)); /* verde escuro (seu ajuste) */
+}
+
+.tough-wounded {
+  background: linear-gradient(90deg, #7a5a1f, var(--gold)); /* âmbar — alerta, mas não crítico */
+}
+
+.tough-critical {
+  background: var(--blood-bright); /* uma unica cor vermelha para a barra critica */
+}
+
+/* ==================
+   CORRUPÇÃO — paleta 100% vermelha (permanente = escuro/seco, temporária = vivo/latejante)
+================== */
+.corr-trackers {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.corr-track {
+  height: 0.6rem;
+}
+
+/* as duas faixas ficam LADO A LADO (nao mais uma sobre a outra): o JS define
+   "left" de cada uma pra elas se encostarem sem se sobrepor, e assim ficam
+   claramente diferenciaveis mesmo sendo as duas vermelhas. */
+.corr-fill-perm,
+.corr-fill-temp {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 0%;
+}
+
+.corr-fill-perm {
+  left: 0;
+  background: var(--blood-dark); /* permanente = sangue seco, fica pra sempre */
+  border-right: 1px solid var(--bg-black); /* linha de separacao entre os dois segmentos */
+}
+
+.corr-fill-temp {
+  background: var(--blood-bright);
+  opacity: 0.85;
+}
+
+.corr-threshold-marker {
+  position: absolute;
+  top: -3px;
+  bottom: -3px;
+  width: 2px;
+  background: var(--parchment);
+  left: 50%; /* JS reposiciona conforme Corruption Threshold/Resolute */
+}
+
+.corr-status {
+  text-align: center;
+  font-family: "Cinzel", serif;
+  font-size: 0.8rem;
+  letter-spacing: 0.05em;
+  color: var(--parchment-dim);
+  margin: 0;
+}
+
+.corr-status-danger {
+  color: var(--blood-bright);
+}
+
+/* ==================
+   ABILITIES & POWERS — lista dinâmica (criada via JS)
+================== */
+.dyn-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.ability-row {
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--border-dim);
+  border-left: 3px solid var(--border-dim); /* essa borda muda de cor por nível, ver [data-level] abaixo */
+  border-radius: 2px;
+  padding: 0.6rem 0.75rem;
+}
+
+.ability-row-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.ability-level-select {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--border-dim);
+  color: var(--parchment);
+  font-family: "Cinzel", serif;
+  font-size: 0.7rem;
+  padding: 0.25rem 0.3rem;
+  border-radius: 2px;
+}
+
+.ability-name-input {
+  flex: 1; /* ocupa todo o espaço que sobrar na linha, empurrando o select e o botão pras pontas */
+}
+
+.ability-remove-btn {
+  background: transparent;
+  border: 1px solid var(--border-dim);
+  color: var(--parchment-dim);
+  width: 1.8rem;
+  height: 1.8rem;
+  border-radius: 2px;
+  cursor: pointer;
+  line-height: 1;
+}
+.ability-remove-btn:hover {
+  border-color: var(--blood-bright);
+  color: var(--blood-bright);
+}
+
+.ability-desc-input {
+  margin-top: 0.4rem;
+  font-size: 0.9rem;
+  font-style: italic;
+}
+
+/* cor da borda esquerda por nível — mesma lógica de cor usada no resto do site
+   (teal = iniciante/calmo, dourado = meio-termo, vermelho = topo/perigoso) */
+.ability-row[data-level="novice"] { border-left-color: #3d6b5c; }
+.ability-row[data-level="adept"]  { border-left-color: var(--gold); }
+.ability-row[data-level="master"] { border-left-color: var(--blood-bright); }
