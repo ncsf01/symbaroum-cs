@@ -6,11 +6,8 @@
   --parchment:     #d8d0b8;   /* "papel envelhecido" (texto) */
   --parchment-dim: #b2ae9d;   /* texto secundário, mais apagado */
 
-  /* paleta "sangrenta" — usada no HP crítico e na corrupção (ambos vermelhos, não laranja) */
-  --blood-dark:    #4a1210;   /* vermelho escuro/seco — dano leve, corrupção permanente */
-  --blood-bright:  #c1272d;   /* vermelho vivo/arterial — dano crítico, corrupção temporária */
-
-  --crimson:       #7a2b28;
+  --blood-dark:    #4a1210;   /* vermelho escuro — dano leve, corrupção permanente */
+  --blood-bright:  #c1272d;   /* vermelho claro — dano crítico, corrupção temporária */
 }
 
 * {
@@ -123,7 +120,7 @@ input[type="number"] {
   text-transform: uppercase;
 }
 
-/* botão pequeno de canto (Random, +Add...) — discreto, sem competir com o resto */
+/* botão pequeno de canto (Random, +Add...) */
 .btn-mini {
   background: transparent;
   border: 1px solid var(--border-dim);
@@ -138,7 +135,7 @@ input[type="number"] {
   color: var(--gold);
 }
 
-/* aviso pequeno acima do grid de atributos (distribuição típica) */
+/* aviso pequeno acima do grid de atributos */
 .attr-hint {
   font-size: 0.75rem;
   font-style: italic;
@@ -162,7 +159,7 @@ input[type="number"] {
   border-radius: 2px;
   padding: 0.6rem 0.7rem;
   text-align: center;
-  min-width: 0; /* sem isso, grid item nunca fica menor que o conteúdo (estoura a coluna) */
+  min-width: 0; /* para não estourar coluna */
 }
 
 .attr-input {
@@ -208,7 +205,7 @@ input[type="number"] {
 }
 
 /* ==================
-   RASTREADOR (base pra Toughness e Corruption)
+   rastreador toughness e corruption)
 ================== */
 .tracker-row {
   display: flex;
@@ -249,41 +246,39 @@ input[type="number"] {
   color: var(--parchment-dim);
 }
 
-/* Trilho de fundo da barra; position:relative ancora as camadas absolutas
-  da barra de corrupcao e o marcador de threshold. */
 .progress-track {
   position: relative;
   height: 0.5rem;
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0);
   border-radius: 4px;
-  overflow: visible; /* permite que o marcador ultrapasse levemente o trilho */
+  overflow: visible; /* permite que o marcador ultrapasse o "trilho" */
 }
 
 .progress-fill {
   height: 100%;
-  width: 100%; /* JS muda esse valor a cada tick */
+  width: 100%;
   border-radius: 4px;
   transition: width 0.2s ease;
 }
 
 /* --------------------------------------------------
-   ESTADOS DE VIDA (Current Toughness) — cor reage ao % restante
-   JS troca a classe (tough-healthy/wounded/critical) em updateToughnessTracker()
+   current toughness - cor reage ao % restante
+   js troca a classe (tough-healthy/wounded/critical) em updateToughnessTracker()
 -------------------------------------------------- */
 .tough-healthy {
-  background: linear-gradient(90deg, rgb(0, 58, 0), rgb(0, 82, 0)); /* verde escuro (seu ajuste) */
+  background: linear-gradient(90deg, rgb(0, 58, 0), rgb(0, 82, 0)); /* verde escuro - full */
 }
 
 .tough-wounded {
-  background: linear-gradient(90deg, #7a5a1f, var(--gold)); /* âmbar — alerta, mas não crítico */
+  background: linear-gradient(90deg, #7a5a1f, var(--gold)); /* âmbar — wounded */
 }
 
 .tough-critical {
-  background: var(--blood-bright); /* uma unica cor vermelha para a barra critica */
+  background: var(--blood-bright); /* vermelho - crítico */
 }
 
 /* ==================
-   CORRUPÇÃO — paleta 100% vermelha (permanente = escuro/seco, temporária = vivo/latejante)
+   CORRUPÇÃO - (permanente = escuro, temporária = claro)
 ================== */
 .corr-trackers {
   display: flex;
@@ -296,9 +291,7 @@ input[type="number"] {
   height: 0.6rem;
 }
 
-/* as duas faixas ficam LADO A LADO (nao mais uma sobre a outra): o JS define
-   "left" de cada uma pra elas se encostarem sem se sobrepor, e assim ficam
-   claramente diferenciaveis mesmo sendo as duas vermelhas. */
+/* o js define "left" de cada barra pra elas se encostarem sem se sobrepor */
 .corr-fill-perm,
 .corr-fill-temp {
   position: absolute;
@@ -309,8 +302,8 @@ input[type="number"] {
 
 .corr-fill-perm {
   left: 0;
-  background: var(--blood-dark); /* permanente = sangue seco, fica pra sempre */
-  border-right: 1px solid var(--bg-black); /* linha de separacao entre os dois segmentos */
+  background: var(--blood-dark);
+  border-right: 1px solid var(--bg-black); /* linha de separação entre os dois segmentos */
 }
 
 .corr-fill-temp {
@@ -324,7 +317,7 @@ input[type="number"] {
   bottom: -3px;
   width: 2px;
   background: var(--parchment);
-  left: 50%; /* JS reposiciona conforme Corruption Threshold/Resolute */
+  left: 50%; /* js reposiciona conforme corruption threshold */
 }
 
 .corr-status {
@@ -341,7 +334,7 @@ input[type="number"] {
 }
 
 /* ==================
-   ABILITIES & POWERS — lista dinâmica (criada via JS)
+   ABILITIES & POWERS — lista dinâmica (criada via js)
 ================== */
 .dyn-list {
   display: flex;
@@ -403,3 +396,148 @@ input[type="number"] {
 .ability-row[data-level="novice"] { border-left-color: #3d6b5c; }
 .ability-row[data-level="adept"]  { border-left-color: var(--gold); }
 .ability-row[data-level="master"] { border-left-color: var(--blood-bright); }
+
+/* ==================
+   WEAPONS — linha compacta (nome | dano | qualidade | remover)
+================== */
+.weapon-row {
+  display: grid;
+  grid-template-columns: 1fr 5rem 1fr auto; /* nome cresce, dano fixo, qualidade cresce, botao fixo */
+  gap: 0.5rem;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--border-dim);
+  border-radius: 2px;
+  padding: 0.5rem 0.6rem;
+}
+
+/* ==================
+   FRIENDS & COMPANIONS — mini-tabela (nome | raça | ocupação | jogador | remover)
+================== */
+.companion-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr) auto;
+  gap: 0.5rem;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--border-dim);
+  border-radius: 2px;
+  padding: 0.5rem 0.6rem;
+}
+
+/* facilitar leitura no celular. */
+@media (max-width: 575px) {
+  .weapon-row,
+  .companion-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ==================
+   PAINEL LATERAL (drawer) — usado agora pra "Add Ability",
+================== */
+
+/* aba fixa grudada na borda direita da tela, sempre visivel */
+.side-tab {
+  position: fixed;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  writing-mode: vertical-rl;
+  background: var(--bg-forest);
+  border: 1px solid var(--border-dim);
+  border-right: none;
+  color: var(--gold);
+  font-family: "Cinzel", serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  padding: 0.9rem 0.5rem;
+  cursor: pointer;
+  z-index: 90;
+  border-radius: 4px 0 0 4px;
+}
+.side-tab:hover {
+  background: rgba(169, 133, 63, 0.15);
+}
+
+/* fundo escurecido atras do painel; cobre a tela toda, clicavel pra fechar */
+.side-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  z-index: 95;
+}
+
+/* o painel fica fora da tela (translateX 100% = deslocado pra direita) e desliza pra aparecer com a classe .open */
+#panelCompendium {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 320px;
+  max-width: 85vw; /* nao passa de 85% da tela em celulares */
+  height: 100vh;
+  background: var(--bg-forest);
+  border-left: 1px solid var(--border-dim);
+  padding: 1.5rem;
+  overflow-y: auto;
+  transform: translateX(100%);
+  transition: transform 0.25s ease;
+  z-index: 100;
+}
+#panelCompendium.open {
+  transform: translateX(0);
+}
+
+#panelCharacters {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 320px;
+  max-width: 85vw;
+  height: 100vh;
+  background: var(--bg-forest);
+  border-right: 1px solid var(--border-dim);
+  transform: translateX(-100%);
+  transition: transform 0.25s ease;
+  z-index: 100;
+}
+#panelCharacters.open {
+  transform: translateX(0);
+}
+
+/* ==================
+   POP-UP DE REGRAS — Toughness 0 e Corrupção no máximo
+================== */
+.rule-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200; /* acima de tudo, inclusive do painel lateral */
+  padding: 1rem;
+}
+
+.rule-modal {
+  background: var(--bg-forest);
+  border: 1px solid var(--blood-bright);
+  border-radius: 3px;
+  padding: 1.5rem;
+  max-width: 420px;
+  text-align: center;
+}
+
+.rule-modal-title {
+  font-family: "Cinzel", serif;
+  color: var(--blood-bright);
+  font-size: 1.1rem;
+  letter-spacing: 0.04em;
+  margin-bottom: 0.75rem;
+}
+
+.rule-modal-text {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin-bottom: 1.25rem;
+}
