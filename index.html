@@ -48,6 +48,16 @@
           <label class="field-label" for="charOccupation">Occupation</label>
           <input type="text" id="charOccupation" class="field-input" placeholder="Treasure-Hunter...">
         </div>
+        <div class="col-6 col-md-3">
+          <label class="field-label" for="charPlayer">Player</label>
+          <input type="text" id="charPlayer" class="field-input" placeholder="Your name...">
+        </div>
+      </div>
+      <div class="row g-3 mt-2 justify-content-center">
+        <div class="col-12 col-md-8">
+          <label class="field-label" for="charQuote">Quote</label>
+          <input type="text" id="charQuote" class="field-input" style="font-style: italic;" placeholder='"Even shadows fear something."'>
+        </div>
       </div>
 
       <!-- Experiencia: Available e readonly porque e calculada no script.js (total - spent). -->
@@ -214,6 +224,8 @@
             <span id="corrMaxValue" class="tracker-value tracker-value-dim">10</span>
           </div>
           <p id="corrStatus" class="corr-status mt-2">Untainted</p>
+          <label class="field-label mt-3" for="charShadow">Shadow</label>
+          <textarea id="charShadow" class="field-input" rows="2" placeholder="Greyish-green, flickers like marsh light..."></textarea>
         </section>
       </div>
 
@@ -230,19 +242,88 @@
           <div id="abilitiesList" class="dyn-list mt-3"></div>
         </section>
 
-        <!-- Reservado para a lista de armas. -->
+        <!-- Lista de armas: dinamica, mesmo padrao de add/remove das habilidades. -->
         <section class="panel mt-4" id="panelWeapons">
-          <!-- Conteudo sera implementado em uma etapa futura. -->
+          <div class="d-flex justify-content-between align-items-center">
+            <h2 class="panel-title mb-0">Weapons</h2>
+            <button type="button" id="addWeaponBtn" class="btn-mini">+ Add</button>
+          </div>
+          <!-- O JS insere aqui cada .weapon-row criada por addWeaponRow(). -->
+          <div id="weaponsList" class="dyn-list mt-3"></div>
         </section>
 
-        <!-- Reservado para armaduras e seus modificadores. -->
+        <!-- Armadura: um unico conjunto equipado (nao uma lista) — o Impeding
+             dela alimenta a formula de Defense em tempo real (ver script.js). -->
         <section class="panel mt-4" id="panelArmor">
-          <!-- Conteudo sera implementado em uma etapa futura. -->
+          <h2 class="panel-title">Armor</h2>
+          <div class="row g-3">
+            <div class="col-6">
+              <label class="field-label" for="armorName">Name</label>
+              <input type="text" id="armorName" class="field-input" placeholder="Studded Leather...">
+            </div>
+            <div class="col-3">
+              <label class="field-label" for="armorProtection">Protection</label>
+              <input type="text" id="armorProtection" class="field-input text-center" placeholder="1D6">
+            </div>
+            <div class="col-3">
+              <!-- Valor negativo, igual a tabela do livro (-2 leve, -3 media, -4 pesada). -->
+              <label class="field-label" for="armorImpeding">Impeding</label>
+              <input type="number" id="armorImpeding" class="field-input text-center" value="0">
+            </div>
+          </div>
         </section>
 
-        <!-- Reservado para traits, equipamento, boons, burdens e notas. -->
+<!-- Traits, fisico, historia, objetivos, alianças e equipamento. -->
         <section class="panel mt-4" id="panelExtras">
-          <!-- Conteudo sera implementado em uma etapa futura. -->
+
+          <!-- Fisico: 3 campos curtos lado a lado. -->
+          <div class="row g-3">
+            <div class="col-4">
+              <label class="field-label" for="charAge">Age</label>
+              <input type="text" id="charAge" class="field-input" placeholder="27">
+            </div>
+            <div class="col-4">
+              <label class="field-label" for="charHeight">Height</label>
+              <input type="text" id="charHeight" class="field-input" placeholder="1.75m">
+            </div>
+            <div class="col-4">
+              <label class="field-label" for="charWeight">Weight</label>
+              <input type="text" id="charWeight" class="field-input" placeholder="70kg">
+            </div>
+          </div>
+
+          <label class="field-label mt-3" for="charAppearance">Appearance</label>
+          <textarea id="charAppearance" class="field-input" rows="2" placeholder="Scarred hands, always in dark green..."></textarea>
+
+          <label class="field-label mt-3" for="charBackground">Background</label>
+          <textarea id="charBackground" class="field-input" rows="3" placeholder="Where they came from, what they lost..."></textarea>
+
+          <label class="field-label mt-3" for="charGoal">Personal Goal</label>
+          <textarea id="charGoal" class="field-input" rows="2" placeholder="What drives them into Davokar..."></textarea>
+
+          <!-- Traits & Racial Abilities: lista dinamica, mais simples que Abilities
+               (sem nivel Novice/Adept/Master — traits nao tem tiers). -->
+          <div class="d-flex justify-content-between align-items-center mt-4">
+            <h2 class="panel-title mb-0">Traits &amp; Racial Abilities</h2>
+            <button type="button" id="addTraitBtn" class="btn-mini">+ Add</button>
+          </div>
+          <div id="traitsList" class="dyn-list mt-3"></div>
+
+          <label class="field-label mt-4" for="charBoons">Boons</label>
+          <textarea id="charBoons" class="field-input" rows="2" placeholder="Friend of the Barbarians..."></textarea>
+
+          <label class="field-label mt-3" for="charBurdens">Burdens</label>
+          <textarea id="charBurdens" class="field-input" rows="2" placeholder="Owes 50 shillings to a money-lender..."></textarea>
+
+          <label class="field-label mt-3" for="charEquipment">Equipment &amp; Possessions</label>
+          <textarea id="charEquipment" class="field-input" rows="3" placeholder="Rope (10m), Lantern, Tinderbox, Rations (3 days)..."></textarea>
+
+          <!-- Friends & Companions: lista dinamica em formato de mini-tabela. -->
+          <div class="d-flex justify-content-between align-items-center mt-4">
+            <h2 class="panel-title mb-0">Friends &amp; Companions</h2>
+            <button type="button" id="addCompanionBtn" class="btn-mini">+ Add</button>
+          </div>
+          <div id="companionsList" class="dyn-list mt-3"></div>
         </section>
       </div>
 
@@ -285,6 +366,7 @@
 
     <button type="button" id="submitNewAbility" class="btn-mini">Add to Sheet</button>
   </aside>
+
   <!-- Area reservada para o rolador de dados. -->
   <div id="diceRoller"><!-- Conteudo sera implementado em uma etapa futura. --></div>
 
@@ -296,6 +378,7 @@
       <button type="button" id="ruleModalClose" class="btn-mini">Close</button>
     </div>
   </div>
+  
   <!-- Carrega o JavaScript no fim do body, depois que os elementos HTML ja existem. -->
   <script src="js/script.js"></script>
 
